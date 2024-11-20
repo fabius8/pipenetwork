@@ -86,7 +86,43 @@ async function launch(userIndex, userDataDir, proxy, userCredentials) {
     try {
         await sleep(5000)
 
-        //const pages = await browser.pages();
+        const page = await browser.newPage();
+        log(userIndex, `Page created successfully for user data directory: ${userDataDir}`);
+
+        const randomUserAgent = randomUseragent.getRandom();
+        await page.setUserAgent(randomUserAgent);
+        log(userIndex, `Using user agent: ${randomUserAgent}`);
+
+        const url = 'chrome-extension://gelgmmdfajpefjbiaedgjkpekijhkgbe/popup.html';
+        log(userIndex, `Navigating to ${url}...`);
+        await page.goto(url, { waitUntil: 'domcontentloaded' });
+        log(userIndex, `Page loaded successfully for user data directory: ${userDataDir}`);
+
+        // 查找并输入邮箱
+        const emailSelector = 'input[placeholder="Email"]';
+        const passwordSelector = 'input[placeholder="Password"]';
+
+        // 输入邮箱
+        const emailInput = await page.waitForSelector(emailSelector, { timeout: 5000 });
+        if (emailInput) {
+            await emailInput.type(userCredentials.username);
+            log(userIndex, `Entered ${userCredentials.username} into email input.`);
+            
+            // 输入密码
+            const passwordInput = await page.waitForSelector(passwordSelector, { timeout: 5000 });
+            if (passwordInput) {
+                await passwordInput.type(userCredentials.password);
+                log(userIndex, `Entered ${userCredentials.password} into password input.`);
+
+                // 按下回车键
+                await page.click('#login-btn');
+                log(userIndex, "Submitted login form.");
+            } else {
+                log(userIndex, "Password input not found, skipping.");
+            }
+        } else {
+            log(userIndex, "Email input not found, skipping password input.");
+        }
 
     } catch (e) {
         log(userIndex, `Error: ${e.message}`);
