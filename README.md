@@ -21,7 +21,7 @@
 
    ```bash
    git clone https://github.com/fabius8/pipenetwork
-   cd gradient_headless
+   cd pipenetwork
    ```
 
 2. **安装依赖**
