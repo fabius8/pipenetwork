@@ -1,0 +1,323 @@
+/* body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f4f4f9;
+} */
+
+body {
+  width: 400px;  /* Adjust to the desired width */
+  height: 400px; /* Optional, adjust height as needed */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f5f5f5;
+}
+
+.container {
+  width: 100%;
+  max-width: 700px; /* Increased max-width for a larger container */
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+
+input {
+  display: block;
+  margin: 10px 0;
+  padding: 12px;
+  width: calc(100% - 24px); /* Ensure inputs are wide enough */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 12px;
+  width: 100%;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+h3 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+p {
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+#rewards-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#rewards-list li {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.button-link {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  background-color: #007BFF;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.button-link:hover {
+  background-color: #0056b3;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 10px;
+  background-color: #f5f5f5;
+}
+
+.status-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #e8f5e9;
+  padding: 8px 12px;
+  border-radius: 20px;
+  position: relative;
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  background-color: #4CAF50; /* Green status */
+  border-radius: 50%;
+}
+
+.status-text {
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+}
+
+.status-tooltip {
+  display: none;
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  color: #333;
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+}
+
+.status-container:hover .status-tooltip {
+  display: block;
+}
+
+/* General Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f4f7;
+}
+
+.main-container {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Header Section */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 80px;               /* Adjust as needed */
+  height: 80px;              /* Same as width for a perfect circle */
+  border-radius: 50%;         /* Makes the element circular */
+  object-fit: cover;          /* Ensures the image fills the circle */
+  background-color: #1a2238;  /* Match the background to the image’s background */
+  border: 2px solid #4CAF50;  /* Optional border */
+  overflow: hidden;           /* Ensures no extra content spills out */
+}
+
+
+/* Status Section */
+.status-section {
+  margin-bottom: 20px;
+}
+
+.status-indicator-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background-color: #e8f5e9;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+}
+
+.status-text {
+  color: #333;
+}
+
+.tooltip {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+}
+
+/* Stats Section */
+.stats-container {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+  width: 45%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card h3 {
+  margin: 0;
+  color: #333;
+  font-size: 24px;
+}
+
+.stat-card p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: #777;
+}
+
+/* Buttons Section */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.primary-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  background-color: #45a049;
+}
+
+.secondary-btn {
+  text-decoration: none;
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+/* Login Button
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+} */
+
+/* Register Button */
+.register-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #007BFF;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-top: 15px;
+  transition: background-color 0.3s;
+}
+
+.register-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Web App Button */
+.webapp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(90deg, #4CAF50, #8BC34A);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  transition: background 0.3s;
+}
+
+.webapp-btn:hover {
+  background: linear-gradient(90deg, #66BB6A, #43A047); /* Darker green hover effect */
+}

@@ -1,0 +1,136 @@
+const fs = require('fs');
+const path = require('path');
+const randomUseragent = require('random-useragent');
+const puppeteer = require('puppeteer-extra');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+
+puppeteer.use(StealthPlugin());
+
+// 获取传入的用户编号
+const userNumber = parseInt(process.argv[2] || process.env.USER_NUMBER);
+
+// 其他函数保持不变
+function getCurrentTime() {
+    const now = new Date();
+    return now.toISOString().replace('T', ' ').split('.')[0];
+}
+
+function log(userIndex, message) {
+    console.log(`[${getCurrentTime()}] [User ${userIndex + 1}] ${message}`);
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// 从文件中读取代理信息并解析
+function loadProxies(filePath) {
+    const proxies = [];
+    const data = fs.readFileSync(filePath, 'utf-8').split('\n');
+    data.forEach(line => {
+        const [ip, port] = line.trim().split(':');
+        if (ip && port) {
+            proxies.push({ ip, port });
+        }
+    });
+    return proxies;
+}
+
+// 从文件中读取用户名和密码
+function loadCredentials(filePath) {
+    const credentials = [];
+    const data = fs.readFileSync(filePath, 'utf-8').split('\n');
+    data.forEach(line => {
+        const [username, password] = line.trim().split(':');
+        if (username && password) {
+            credentials.push({ username, password });
+        }
+    });
+    return credentials;
+}
+
+async function launch(userIndex, userDataDir, proxy, userCredentials) {
+    const extensionPath1 = path.resolve('extension/pipenetwork');
+    const extensionPath2 = path.resolve('extension/canvas');
+
+    const extensionPaths = [extensionPath1, extensionPath2].join(',');
+
+    const proxyUrl = `http://${proxy.ip}:${proxy.port}`;
+    // 动态调试端口，根据 userIndex 生成不同的端口号
+    const debuggingPort = 11500 + userIndex;
+
+    log(userIndex, `Launching browser with user data directory: ${userDataDir}, proxy: ${proxyUrl}, and debugging port: ${debuggingPort}`);
+    const browser = await puppeteer.launch({
+        //executablePath: '/usr/bin/google-chrome-stable',
+        headless: false,
+        ignoreHTTPSErrors: true,
+        userDataDir: userDataDir,
+        args: [
+            `--no-sandbox`,
+            `--disable-extensions-except=${extensionPaths}`,
+            `--load-extension=${extensionPaths}`,
+            //`--ignore-certificate-errors=${pemPath}`,
+            `--proxy-server=${proxyUrl}`,
+            `--remote-debugging-port=${debuggingPort}`,  // 根据 userIndex 设置的调试端口
+            //'--disable-gpu',  // 禁用GPU加速
+            //'--disable-dev-shm-usage', // 禁用/dev/shm使用
+            //'--disable-setuid-sandbox',
+            '--no-first-run',
+            '--no-zygote',
+            `--js-flags=--max-old-space-size=512`, // 限制JavaScript堆内存
+        ],
+    });
+    log(userIndex, `Browser launched successfully with user data directory: ${userDataDir}`);
+
+    // 遍历所有页面并关闭包含 "gradient" 的页面
+    try {
+        await sleep(5000)
+
+        //const pages = await browser.pages();
+
+    } catch (e) {
+        log(userIndex, `Error: ${e.message}`);
+    }
+
+    await sleep(10000)
+
+}
+
+// 主运行函数
+async function run() {
+    try {
+        const userIndex = userNumber - 1;
+        const baseUserDataDir = path.resolve('USERDATA');
+        const userDataDir = path.join(baseUserDataDir, userNumber.toString().padStart(4, '0'));
+        
+        // 确保用户数据目录存在
+        fs.mkdirSync(userDataDir, { recursive: true });
+
+        // 读取代理和凭据
+        const proxies = loadProxies('proxies.txt');
+        const credentials = loadCredentials('credentials.txt');
+
+        if (!proxies[userIndex] || !credentials[userIndex]) {
+            throw new Error('代理或凭据不足');
+        }
+
+        await launch(userIndex, userDataDir, proxies[userIndex], credentials[userIndex]);
+    } catch (error) {
+        console.error(`Worker ${userNumber} error:`, error);
+        process.exit(1);
+    }
+}
+
+// 启动工作进程
+run();
+
+// 错误处理
+process.on('uncaughtException', (err) => {
+    console.error(`Worker ${userNumber} uncaught exception:`, err);
+    process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error(`Worker ${userNumber} unhandled rejection:`, reason);
+    process.exit(1);
+});

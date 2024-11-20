@@ -1,0 +1,26 @@
+{
+   "action": {
+      "default_icon": {
+         "128": "icons/icon128.png",
+         "16": "icons/icon16.png",
+         "48": "icons/icon48.png"
+      },
+      "default_popup": "popup.html"
+   },
+   "background": {
+      "service_worker": "background.js"
+   },
+   "description": "Test Pipe nodes and earn points.",
+   "host_permissions": [ "https://pipe-network-backend.pipecanary.workers.dev/*" ],
+   "icons": {
+      "128": "icons/icon128.png",
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuDveJUe67eHokxn549vkP2OHYYP7OlHTzatld/oUWVlJRXxNBLewoXnQrhIYbM4Pd+m+M42cbn7IZiZIMSqT1umvD6bWQV6X+QxQmLO0rZktfPWC+3Tp5plKNxcohNc6kVOYuPkiZazzHJktwy4d/tcJmjvY0jjYv5QzU/fUuYF7C/B4UhmNq3M07wXlrgwuZe7hd82tRzNbGoQDoQYedmvzOe9kVqzVHbSSIMgTo6Y7Fir0qma1QyEQ7RgkoLcj+peGw2S856xUhgDxAfTMJYzIKcelhMmPTjRCmQyJsbjl0lufDuDAGnHMdMZ2t2YyCnPaBBBrJ9NThzChMVTkmQIDAQAB",
+   "manifest_version": 3,
+   "name": "Pipe Guardian Node",
+   "permissions": [ "storage", "alarms", "notifications" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0"
+}

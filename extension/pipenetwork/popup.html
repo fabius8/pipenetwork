@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pipe Canary Node</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="main-container">
+    <!-- Header Section -->
+    <header class="header">
+      <img src="icons/icon16.png" alt="Pipe Network Logo" class="logo" />
+      <h2>Pipe Guardian</h2>
+    </header>
+
+    <!-- Login Section -->
+    <div id="login-container">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button id="login-btn" class="primary-btn">Login</button>
+      <a href="https://pipecdn.app/" target="_blank" class="button-link">
+        Register / Sign Up
+      </a>
+    </div>
+
+    <!-- Test Section (Initially Hidden) -->
+    <div id="test-container" style="display: none;">
+      <div class="status-section">
+        <div class="status-indicator-container">
+          <span class="status-indicator"></span>
+          <span class="status-text">Good</span>
+        </div>
+        <p class="tooltip">Your node is all set.</p>
+      </div>
+
+      <!-- Stats Section -->
+      <div class="stats-container">
+        <div class="stat-card">
+          <h3 id="points">0</h3>
+          <p>Points</p>
+        </div>
+
+        <a href="https://pipecdn.app/" target="_blank" class="webapp-btn">
+          Open Web App
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
