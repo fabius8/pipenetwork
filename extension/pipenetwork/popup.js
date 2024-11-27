@@ -1,4 +1,6 @@
 document.getElementById("login-btn").addEventListener("click", login);
+document.getElementById("logout-btn").addEventListener("click", logout);
+document.addEventListener("DOMContentLoaded", getPoints);
 // document.getElementById("start-test-btn").addEventListener("click", startTesting);
 // document.addEventListener('DOMContentLoaded', () => {
 //   const loginButton = document.getElementById('login-btn');
@@ -20,6 +22,28 @@ document.getElementById("login-btn").addEventListener("click", login);
 //   });
 // });
 
+function showAuthSection() {
+  document.getElementById("login-container").style.display = "block";
+  document.getElementById("test-container").style.display = "none";
+}
+
+function showDashboard() {
+  document.getElementById("login-container").style.display = "none";
+  document.getElementById("test-container").style.display = "flex";
+}
+
+async function logout(e) {
+  if(e) {
+    e.preventDefault();
+  }
+  await chrome.storage.local.clear(function(){
+    var error = chrome.runtime.lastError;
+    if (error) {
+        console.error(error);
+    }
+    showAuthSection();
+  });
+}
 
 async function login() {
   const email = document.getElementById("email").value;
@@ -35,9 +59,14 @@ async function login() {
     if (response.ok) {
       const data = await response.json();
       if (data.token) {
-        await chrome.storage.local.set({ token: data.token });
-        document.getElementById("login-container").style.display = "none";
-        document.getElementById("test-container").style.display = "block";
+        await chrome.storage.local.set({ token: data.token }, function() {
+          if (chrome.runtime.lastError) {
+            console.error("Error saving token:", chrome.runtime.lastError);
+          } else {
+            console.log("Token saved successfully.");
+          }
+        });
+        showDashboard();
         fetchPoints();
       } else {
         alert("Login failed! Please try again.");
@@ -61,8 +90,12 @@ async function fetchPoints() {
   const response = await fetch("https://pipe-network-backend.pipecanary.workers.dev/api/points", {
     headers: { Authorization: `Bearer ${token}` }
   });
-  const data = await response.json();
-  document.getElementById("points").innerText = data.points;
+  if(response.ok) {
+    const data = await response.json();
+    document.getElementById("points").innerText = data.points;
+  } else if(response.status === 401) {
+    logout();
+  }
 }
 
 async function startTesting() {
@@ -99,9 +132,12 @@ async function testNode(node) {
 
 document.addEventListener("DOMContentLoaded", () => {
   chrome.storage.local.get(["token", "username"], (result) => {
-    if (result.token && result.username) {
-      sendHeartbeat(result.token, result.username);
-      setInterval(() => sendHeartbeat(result.token, result.username), 5 * 60 * 1000); // Every 5 minutes
+    if (result.token) {
+      showDashboard();
+      fetchPoints();
+      // Todo: endpoint was throwing 400, so temporarily commenting.
+      // sendHeartbeat(result.token, result.username);
+      // setInterval(() => sendHeartbeat(result.token, result.username), 5 * 60 * 1000); // Every 5 minutes
     }
   });
 });
@@ -142,4 +178,25 @@ async function fetchGeoLocation(ip) {
     return await response.json();
   }
   return null;
+}
+
+async function getPoints() {
+  // const { token } = await chrome.storage.local.get("token");
+  try {
+    const result = await new Promise((resolve, reject) => {
+      chrome.storage.local.get("token", function (data) {
+        if (chrome.runtime.lastError) {
+          return reject(chrome.runtime.lastError);
+        }
+        resolve(data.token);
+      });
+    });
+    console.log("Retrieved token:", result);
+    if(result){
+      console.log("show dashboard:", result);
+      showDashboard();
+    }
+  } catch (error) {
+    console.error("Error retrieving token:", error);
+  }
 }

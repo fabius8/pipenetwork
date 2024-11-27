@@ -14,7 +14,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 // Function to perform node testing
 async function runNodeTests() {
   try {
-    const response = await fetch("https://pipe-network-backend.pipecanary.workers.dev/api/nodes");
+    const response = await fetch("https://api.pipecdn.app/api/nodes");
     const nodes = await response.json();
 
     for (const node of nodes) {
@@ -25,7 +25,7 @@ async function runNodeTests() {
       await reportTestResult(node, latency);
     }
     console.log("All node tests completed.");
-    showNotification("Node testing completed! Results sent to backend.");
+    // showNotification("Node testing completed! Results sent to backend.");
   } catch (error) {
     console.error("Error running node tests:", error);
   }
@@ -61,7 +61,7 @@ async function reportTestResult(node, latency) {
   }
 
   try {
-    const response = await fetch("https://pipe-network-backend.pipecanary.workers.dev/api/test", {
+    const response = await fetch("https://api.pipecdn.app/api/test", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -99,25 +99,90 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 async function getPoints() {
   const token = await chrome.storage.local.get("token");
-  const response = await fetch("https://pipe-network-backend.pipecanary.workers.dev/api/points", {
+  const response = await fetch("https://api.pipecdn.app/api/points", {
     headers: { "Authorization": `Bearer ${token}` }
   });
   const data = await response.json();
   return data.points;
 }
 
+// Map to store notification links
+const notificationLinks = {};
 
-// Function to show notifications
-function showNotification(message) {
-  chrome.notifications.create({
+// Function to show notifications with interaction
+function showNotification(message, link) {
+  const notificationOptions = {
     type: "basic",
     iconUrl: "icons/icon48.png",
-    title: "Pipe Network Tester",
-    message: message
+    title: "Pipe Network Guardian node",
+    message: message,
+    buttons: [{ title: "Earn Rewards" }]
+  };
+
+  chrome.notifications.create("rewardsNotification", notificationOptions, (notificationId) => {
+    console.log(`Notification created with ID: ${notificationId}`);
+    // Store the link with the notification ID
+    notificationLinks[notificationId] = link;
   });
 }
-const backendUrl = 'https://pipe-network-backend.pipecanary.workers.dev/api/heartbeat';
-const HEARTBEAT_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+// Listen for button clicks on notifications
+chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex) => {
+  if (notificationId in notificationLinks && buttonIndex === 0) {
+    // Open the link in a new tab when the button is clicked
+    chrome.tabs.create({ url: notificationLinks[notificationId] });
+    // Optionally, remove the link from the map after use
+    delete notificationLinks[notificationId];
+  }
+});
+
+// Function to check for rewards and notify the user
+async function checkForRewards() {
+  try {
+    // Retrieve the token from storage
+    const { token } = await chrome.storage.local.get("token");
+    if (!token) {
+      console.warn("No token found. Skipping rewards check.");
+      return;
+    }
+
+    // Fetch rewards data with authorization header
+    const response = await fetch("https://api.pipecdn.app/api/rewards", {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+
+    if (!response.ok) {
+      console.warn("Failed to fetch rewards data.");
+      return;
+    }
+
+    const data = await response.json();
+    if (Object.keys(data).length === 0) {
+      console.log("No rewards available at the moment.");
+      return;
+    }
+
+    // Notify the user about the rewards
+    showNotification(`Earn more rewards points! Visit: ${data.link}`, data.link);
+  } catch (error) {
+    console.error("Error checking for rewards:", error);
+  }
+}
+
+// Create an alarm to check for rewards once a day
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.alarms.create("dailyRewardsCheck", { periodInMinutes: 1440 }); // 1440 minutes = 24 hours
+});
+
+// Listen for the alarm and run checkForRewards when triggered
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === "dailyRewardsCheck") {
+    checkForRewards();
+  }
+});
+
+const backendUrl = 'https://api.pipecdn.app/api/heartbeat';
+const HEARTBEAT_INTERVAL = 6 * 60 * 60 * 1000; // 6 hours
 
 // Initialize heartbeat logic when the extension starts
 chrome.runtime.onStartup.addListener(() => {
@@ -153,7 +218,7 @@ async function startHeartbeat() {
       const geoInfo = await getGeoLocation();
 
       // Send the heartbeat request to the backend
-      const response = await fetch("https://pipe-network-backend.pipecanary.workers.dev/api/heartbeat", {
+      const response = await fetch("https://api.pipecdn.app/api/heartbeat", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -203,3 +268,4 @@ async function getGeoLocation() {
     return { ip: 'unknown', location: 'unknown' };
   }
 }
+

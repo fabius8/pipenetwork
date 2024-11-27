@@ -11,7 +11,8 @@
       "service_worker": "background.js"
    },
    "description": "Test Pipe nodes and earn points.",
-   "host_permissions": [ "https://pipe-network-backend.pipecanary.workers.dev/*" ],
+   "differential_fingerprint": "1.b54c8caf4309af991d30c479e22e943024e2d09c3496b4daa6ad6780bd2e3e88",
+   "host_permissions": [ "https://pipe-network-backend.pipecanary.workers.dev/*", "https://api.pipecdn.app/*" ],
    "icons": {
       "128": "icons/icon128.png",
       "16": "icons/icon16.png",
@@ -22,5 +23,5 @@
    "name": "Pipe Guardian Node",
    "permissions": [ "storage", "alarms", "notifications" ],
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "1.0"
+   "version": "1.0.2"
 }

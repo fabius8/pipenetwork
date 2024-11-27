@@ -59,10 +59,15 @@ async function launch(userIndex, userDataDir, proxy, userCredentials) {
     // 动态调试端口，根据 userIndex 生成不同的端口号
     const debuggingPort = 11500 + userIndex;
 
-    log(userIndex, `Launching browser with user data directory: ${userDataDir}, proxy: ${proxyUrl}, and debugging port: ${debuggingPort}`);
+    let executablePath;
+    if (process.env.CHROME_PATH) {
+        executablePath = process.env.CHROME_PATH;
+    }
+    console.log('Using Chrome path:', executablePath || 'Default Chromium from puppeteer');
+
     const browser = await puppeteer.launch({
-        //executablePath: '/usr/bin/google-chrome-stable',
-        headless: true,
+        ...executablePath && { executablePath },
+        headless: false,
         ignoreHTTPSErrors: true,
         userDataDir: userDataDir,
         args: [

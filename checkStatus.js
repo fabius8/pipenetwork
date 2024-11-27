@@ -28,22 +28,10 @@ async function monitorExtension(port) {
 
         page.on('response', async response => {
             const url = response.url();
-            if (url.includes('api.gradient.network/api/sentrynode/get/')) {
+            if (url.includes('api/points')) {
                 try {
                     const textResponse = await response.text();
                     console.log(textResponse)
-                    const responseData = JSON.parse(textResponse);
-                    if (!responseData || !responseData.data) return;
-
-                    const { active, ip } = responseData.data;
-                    console.log('\n状态检查结果:');
-                    console.log(`IP地址: ${ip}`);
-                    console.log(`活动状态: ${active ? '正常' : '失败'}`);
-                    
-                    if (!active) {
-                        console.log('\n警告: 节点状态为非活动状态!');
-                    }
-
                     responseHandled = true;
                 } catch (error) {
                     // Silently ignore parsing errors
@@ -51,7 +39,7 @@ async function monitorExtension(port) {
             }
         });
 
-        await page.goto('chrome-extension://caacbgbklghmpodbdafajbgdnegacfmo/popup.html', {
+        await page.goto('chrome-extension://gelgmmdfajpefjbiaedgjkpekijhkgbe/popup.html', {
             waitUntil: 'networkidle0',
             timeout: 8000
         });
@@ -86,13 +74,14 @@ async function monitorExtension(port) {
 }
 
 async function main() {
-    const port = parseInt(process.argv[2]);
+    const index = parseInt(process.argv[2]);
     
-    if (isNaN(port) || port <= 0) {
-        console.log("Usage: node script.js <port>");
+    if (isNaN(index) || index <= 0) {
+        console.log("Usage: node script.js <index>");
         process.exit(1);
     }
 
+    const port = index + 11500 - 1
     const success = await monitorExtension(port);
     
     if (!success) {

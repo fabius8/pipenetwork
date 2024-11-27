@@ -21,6 +21,10 @@ body {
   padding: 20px;
   box-sizing: border-box;
   background-color: #f5f5f5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+  "Segoe UI Symbol";
+line-height: 1.5;
 }
 
 .container {
@@ -57,7 +61,7 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #555;
 }
 
 h3 {
@@ -82,18 +86,19 @@ p {
 
 .button-link {
   display: inline-block;
-  padding: 10px 20px;
+  padding: 12px 0px;
   font-size: 16px;
   color: white;
-  background-color: #007BFF;
+  background-color: #1a2238;
   text-align: center;
   text-decoration: none;
-  border-radius: 5px;
+  border-radius: 8px;
   margin-top: 10px;
+  width: 100%
 }
 
 .button-link:hover {
-  background-color: #0056b3;
+  background-color: #555;
 }
 
 body {
@@ -154,12 +159,17 @@ body {
 
 .main-container {
   max-width: 400px;
+  min-width: 80%;
+  height: 80vh;
   margin: auto;
-  padding: 20px;
+  padding: 15px;
   background-color: white;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  flex-direction: column;
+  justify-content: space-between;
+  display: flex;
 }
 
 /* Header Section */
@@ -168,12 +178,12 @@ body {
   align-items: center;
   gap: 10px;
   justify-content: center;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 .logo {
-  width: 80px;               /* Adjust as needed */
-  height: 80px;              /* Same as width for a perfect circle */
+  width: 40px;               /* Adjust as needed */
+  height: 40px;              /* Same as width for a perfect circle */
   border-radius: 50%;         /* Makes the element circular */
   object-fit: cover;          /* Ensures the image fills the circle */
   background-color: #1a2238;  /* Match the background to the image’s background */
@@ -181,10 +191,19 @@ body {
   overflow: hidden;           /* Ensures no extra content spills out */
 }
 
+button.secondary-btn {
+  color: #1a2238;
+  background-color: #1a223826;
+  font-weight: 400;
+}
+
+.secondary-btn.logout-btn {
+  margin-top: 20px;
+}
 
 /* Status Section */
 .status-section {
-  margin-bottom: 20px;
+  margin: auto 20px;
 }
 
 .status-indicator-container {
@@ -214,18 +233,26 @@ body {
   margin-top: 5px;
 }
 
+#test-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 /* Stats Section */
 .stats-container {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 20px;
+  gap: 10px;
 }
 
 .stat-card {
   background-color: #f9f9f9;
   border-radius: 8px;
   padding: 15px;
-  width: 45%;
+  width: 25%;
+  display: flex;
+  flex-direction: column;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -233,6 +260,7 @@ body {
   margin: 0;
   color: #333;
   font-size: 24px;
+  line-height: 1;
 }
 
 .stat-card p {
@@ -259,7 +287,7 @@ body {
 }
 
 .primary-btn:hover {
-  background-color: #45a049;
+  background-color: #2c4e8c;
 }
 
 .secondary-btn {
@@ -268,8 +296,7 @@ body {
   font-weight: bold;
 }
 
-/* Login Button
-.login-btn {
+#login-btn {
   width: 100%;
   padding: 12px;
   background-color: #4CAF50;
@@ -280,14 +307,13 @@ body {
   cursor: pointer;
   margin-top: 10px;
   transition: background-color 0.3s;
-} */
+}
 
 /* Register Button */
 .register-btn {
-  display: block;
-  width: 100%;
+  width: calc(100% - 14px);
   padding: 12px;
-  background-color: #007BFF;
+  background-color: #172642;
   color: white;
   text-decoration: none;
   border-radius: 8px;
@@ -297,7 +323,7 @@ body {
 }
 
 .register-btn:hover {
-  background-color: #0056b3;
+  background-color: #2c4e8c;
 }
 
 /* Web App Button */
@@ -306,8 +332,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  width: 100%;
   padding: 12px;
+  flex-grow: 1;
   background: linear-gradient(90deg, #4CAF50, #8BC34A);
   color: white;
   text-decoration: none;
@@ -320,4 +346,18 @@ body {
 
 .webapp-btn:hover {
   background: linear-gradient(90deg, #66BB6A, #43A047); /* Darker green hover effect */
+}
+#login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 10px 10px; 
+}
+
+#email {
+  width: 100%
+}
+#password {
+  width: 100%
 }
