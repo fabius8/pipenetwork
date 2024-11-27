@@ -43,6 +43,10 @@
    ```bash
    node start-multiple.js 1 20
    ```
+   **查询节点状态**
+   ```bash
+   node checkStatus.js 1
+   ```
    **pm2其他命令**
    ```bash
    pm2 list
