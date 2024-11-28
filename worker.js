@@ -3,6 +3,7 @@ const path = require('path');
 const randomUseragent = require('random-useragent');
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+require('dotenv').config();
 
 puppeteer.use(StealthPlugin());
 
